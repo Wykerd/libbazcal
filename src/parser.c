@@ -209,8 +209,8 @@ int bz_parse_bazaar (bz_fetch_res_t *res, bz_bazaar_t *parsed) {
 
         strcpy(LAST_ITEM->item_name, item_name);
 
-        LAST_ITEM->sell = json_number_value(sell_j);
-        LAST_ITEM->buy = json_number_value(buy_j);
+        LAST_ITEM->sell = json_number_value(sell_j) - 0.1;
+        LAST_ITEM->buy = json_number_value(buy_j) + 0.1;
 
         LAST_ITEM->volume = json_integer_value(volume_j);
         LAST_ITEM->svolume = json_integer_value(svolume_j);
