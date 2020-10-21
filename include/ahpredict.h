@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **predictions, size_t len);
+bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **predictions, size_t len, size_t *poollen);
 
 bz_auction_pool_t *bz_random_auction_flips (
     bz_auction_pool_t **pool, 

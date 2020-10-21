@@ -29,7 +29,7 @@ static time_t get_time_ms(void) {
     return (time_t)ts.tv_sec * 1000 + (ts.tv_nsec / 1000000);
 };
 
-bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **predictions, size_t len) {
+bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **predictions, size_t len, size_t *poollen) {
     bz_auction_pool_t **pool = malloc(sizeof(bz_auction_pool_t *));
     size_t pool_len = 0;
 
@@ -118,6 +118,8 @@ next_loop:
         sqlite3_finalize(stmt);
     }
 
+    *poollen = pool_len;
+
     return pool;
 }
 
@@ -164,7 +166,7 @@ bz_auction_pool_t *bz_random_auction_flips (
         if (++i >= len) i = 0; // loop back
 
         if (pool[i]->size < 1) continue;
-        
+
         size_t _start_index = random_range(0, pool[i]->size - 1);
 
         size_t x = _start_index;

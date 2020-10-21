@@ -56,10 +56,12 @@ int main () {
             for (size_t i = 0; i < predictions_len; i++) {
                 printf("[libbazcal] Prediction: %s,%d,%.2f\n", predictions[i]->item_name, predictions[i]->n, predictions[i]->value);
             }
-            bz_auction_pool_t **pool = bz_populate_auction_pool(db, predictions, predictions_len);
-            bz_auction_pool_t *random_flips = bz_random_auction_flips(pool, predictions_len, 0, 0, RAND_MAX, 50, 6, NULL);
+            size_t pool_len = 0;
+            bz_auction_pool_t **pool = bz_populate_auction_pool(db, predictions, predictions_len, &pool_len);
+            bz_auction_pool_t *random_flips = bz_random_auction_flips(pool, pool_len, 0, 0, RAND_MAX, 50, 6, NULL);
             printf("[libbazcal] %zu random predictions\n", random_flips->size);
             bz_free_random_auction_flips(random_flips);
+            bz_free_auction_pool(pool, pool_len);
             bz_free_predictions(predictions, predictions_len);
         }
 
