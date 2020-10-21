@@ -12,6 +12,7 @@ add_library(bazcal SHARED
     src/calc.c 
     src/db.c
     src/ahpredict.c
+    src/loop.c
 )
 
 target_compile_options(bazcal PRIVATE -Wall)
