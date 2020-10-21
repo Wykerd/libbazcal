@@ -14,6 +14,8 @@ add_library(bazcal SHARED
     src/ahpredict.c
 )
 
+target_compile_options(bazcal PRIVATE -Wall)
+
 include_directories(include)
 
 target_link_libraries(bzcore PUBLIC bazcal)

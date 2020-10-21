@@ -41,7 +41,6 @@ int bz_parse_auctions (bz_fetch_res_t *res, bz_auction_page_t *parsed) {
     
     json_t *pages = json_object_get(root, "totalPages");
     json_t *page = json_object_get(root, "page");
-    json_t *name = json_object_get(root, "auctions");
     json_t *auctions = json_object_get(root, "auctions");
     
     if (!json_is_integer(page) || !json_is_integer(pages)) {

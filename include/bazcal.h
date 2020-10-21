@@ -31,7 +31,7 @@ extern "C" {
 
 #define UUID_LENGTH 32
 
-typedef __uint8_t* uuid_t;
+typedef char* uuid_t;
 typedef __uint64_t bid_t;
 
 struct bz_auction_item_s {

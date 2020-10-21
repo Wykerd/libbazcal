@@ -51,10 +51,8 @@ double quick_select (double *arr, size_t n) {
         ELEM_SWAP(arr[low], arr[hh]) ;
 
         /* Re-set active partition */
-        if (hh <= median)
-            low = ll;
-            if (hh >= median)
-            high = hh - 1;
+        if (hh <= median) low = ll;
+        if (hh >= median) high = hh - 1;
     }
 }
 

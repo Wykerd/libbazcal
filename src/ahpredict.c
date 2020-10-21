@@ -58,7 +58,8 @@ bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **pre
         rc = sqlite3_step(stmt);
 
         if (rc == SQLITE_ROW) {
-            pool[pool_len++] = malloc(sizeof(bz_auction_pool_t));
+            pool = realloc(pool, ++pool_len * sizeof(bz_auction_pool_t *));
+            pool[pool_len-1] = malloc(sizeof(bz_auction_pool_t));
             pool[pool_len-1]->candidates = malloc(sizeof(bz_auction_candidate_t *));
             pool[pool_len-1]->size = 0;
         }
@@ -177,9 +178,7 @@ bz_auction_pool_t *bz_random_auction_flips (
 
             ret->candidates[ret->size-1] = pool[i]->candidates[x];
 
-            if (ret->size == try_item_amount) {
-                return ret;
-            }
+            if (ret->size == try_item_amount) return ret;
 
             break;
 fail_continue:
