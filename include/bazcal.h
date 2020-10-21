@@ -3,6 +3,14 @@
 
 #include <stddef.h>
 #include <time.h>
+#include <sqlite3.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define CHECK_BIND_OK(x) rc = x; if (rc != SQLITE_OK) { fprintf(stderr, "DB bind error: %s\n", sqlite3_errmsg(db)); return rc; };
+#define CHECK_BIND_OK_NULL(x) if (x != SQLITE_OK) { fprintf(stderr, "DB bind error: %s\n", sqlite3_errmsg(db)); return NULL; };
 
 #define UUID_LENGTH 32
 
@@ -17,7 +25,7 @@ struct bz_bid_info_s {
 typedef struct bz_bid_info_s bz_bid_info_t;
 
 struct bz_auction_item_s {
-    uuid_t uuid; // 128 bit unique id
+    uuid_t uuid;
     uuid_t auctioneer;
     time_t start;
     time_t end;
@@ -27,6 +35,7 @@ struct bz_auction_item_s {
     } name;
     bid_t max_bid;
     int bin;
+    int has_bid;
 };
 
 typedef struct bz_auction_item_s bz_auction_item_t;
@@ -38,5 +47,19 @@ struct bz_auction_prediction_s {
 };
 
 typedef struct bz_auction_prediction_s bz_auction_prediction_t;
+
+struct bz_bazaar_item_s {
+    char* item_name;
+    double buy;
+    double sell;
+    int volume;
+    int svolume;
+};
+
+typedef struct bz_bazaar_item_s bz_bazaar_item_t;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

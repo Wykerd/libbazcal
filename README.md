@@ -8,3 +8,4 @@
 
 - A C Compiler (GCC or Clang)
 - CMake
+- Nodejs (building llhttp)

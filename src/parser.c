@@ -4,8 +4,9 @@
 #include <string.h>
 
 #define LAST_AUCTION parsed->auctions[parsed->count - 1]
+#define LAST_ITEM parsed->items[parsed->count - 1]
 
-int bz_parse_res (bz_fetch_res_t *res, bz_auction_page_t *parsed) {
+int bz_parse_auctions (bz_fetch_res_t *res, bz_auction_page_t *parsed) {
     json_t *root;
     json_error_t error;
     root = json_loads(res->buf, 0, &error);
@@ -86,6 +87,8 @@ int bz_parse_res (bz_fetch_res_t *res, bz_auction_page_t *parsed) {
 
         LAST_AUCTION->max_bid = higest_bid_int ? higest_bid_int : start_bid_int;
 
+        LAST_AUCTION->has_bid = higest_bid_int ? 1 : 0;
+
         const char *item_name_cstr = json_string_value(item_name);
 
         LAST_AUCTION->name.item = calloc(sizeof(char), strlen(item_name_cstr) + 1);
@@ -123,6 +126,8 @@ bz_auction_page_t *bz_auction_page_init () {
     res->page = 0;
     res->pages = 0;
     res->auctions = malloc(sizeof(bz_auction_page_t*));
+
+    return res;
 }
 
 void auction_page_free (bz_auction_page_t *page) {
@@ -136,4 +141,103 @@ void auction_page_free (bz_auction_page_t *page) {
     };
     free(page->auctions);
     free(page);
+}
+
+
+int bz_parse_bazaar (bz_fetch_res_t *res, bz_bazaar_t *parsed) {
+    json_t *root;
+    json_error_t error;
+    root = json_loads(res->buf, 0, &error);
+
+    if (!root) {
+        fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);
+        return 1;
+    }
+
+    if (!json_is_object(root)) {
+        fprintf(stderr, "error: response is not an object\n");
+        goto fail;
+    }
+
+    json_t *products = json_object_get(root, "products");
+
+    if (!json_is_object(products)) {
+        fprintf(stderr, "error: products is not an object\n");
+        goto fail;
+    }
+
+    const char *p_key;
+    json_t *product;
+
+    json_object_foreach(products, p_key, product) {
+        if (!json_is_object(product)) {
+            fprintf(stderr, "error: product is not an object\n");
+            continue; // skip this iteration
+        };
+
+        json_t *name_j = json_object_get(product, "product_id");
+
+        json_t *sell_summary_j = json_object_get(product, "sell_summary");
+        if (!json_is_array(sell_summary_j)) continue;
+        if (json_array_size(sell_summary_j) == 0) continue;
+        json_t *sell_summary_0_j = json_array_get(sell_summary_j, 0);
+        if (!json_is_object(sell_summary_0_j)) continue;
+        json_t *buy_j = json_object_get(sell_summary_0_j, "pricePerUnit");
+
+        json_t *buy_summary_j = json_object_get(product, "buy_summary");
+        if (!json_is_array(buy_summary_j)) continue;
+        if (json_array_size(buy_summary_j) == 0) continue;
+        json_t *buy_summary_0_j = json_array_get(buy_summary_j, 0);
+        if (!json_is_object(buy_summary_0_j)) continue;
+        json_t *sell_j = json_object_get(buy_summary_0_j, "pricePerUnit");
+
+        json_t *quick_status_j = json_object_get(product, "quick_status");
+        if (!json_is_object(quick_status_j)) continue;
+
+        json_t *volume_j = json_object_get(quick_status_j, "buyMovingWeek");
+        json_t *svolume_j = json_object_get(quick_status_j, "sellMovingWeek");
+
+        if (!json_is_number(buy_j) || !json_is_number(sell_j) || !json_is_integer(volume_j) || !json_is_integer(svolume_j) || !json_is_string(name_j)) continue;
+
+        parsed->count++;
+        parsed->items = realloc(parsed->items, parsed->count * sizeof(bz_bazaar_item_t*));
+        LAST_ITEM  = malloc(sizeof(bz_bazaar_item_t));
+
+        const char *item_name = json_string_value(name_j);
+
+        LAST_ITEM->item_name = calloc(sizeof(char), strlen(item_name) + 1);
+
+        strcpy(LAST_ITEM->item_name, item_name);
+
+        LAST_ITEM->sell = json_number_value(sell_j);
+        LAST_ITEM->buy = json_number_value(buy_j);
+
+        LAST_ITEM->volume = json_integer_value(volume_j);
+        LAST_ITEM->svolume = json_integer_value(svolume_j);
+    }
+
+    json_decref(root);
+    return 0;
+fail:
+    json_decref(root);
+    return 1;
+}
+
+void bazaar_free (bz_bazaar_t *data) {
+    for (size_t c = 0; c < data->count; c++) {
+        free(data->items[c]->item_name);
+        free(data->items[c]);
+        data->items[c] = NULL;
+    };
+    free(data->items);
+    free(data);
+}
+
+bz_bazaar_t *bz_bazaar_init () {
+    bz_bazaar_t *res = malloc(sizeof(bz_bazaar_t));
+
+    res->count = 0;
+    res->items = malloc(sizeof(bz_bazaar_item_t*));
+
+    return res;
 }

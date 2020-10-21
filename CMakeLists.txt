@@ -4,7 +4,7 @@ project(bazcal)
 
 add_executable(bzcore src/main.c)
 
-add_library(bazcal SHARED src/regression.c src/quickselect.c src/parser.c src/fetch.c src/calc.c)
+add_library(bazcal SHARED src/regression.c src/quickselect.c src/parser.c src/fetch.c src/calc.c src/db.c)
 
 include_directories(include)
 

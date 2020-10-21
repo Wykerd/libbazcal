@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "array": "c",
+        "hash_map": "c",
+        "deque": "c",
+        "list": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "unordered_set": "c",
+        "vector": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "valarray": "c",
+        "tuple": "c",
+        "condition_variable": "c"
+    }
+}
