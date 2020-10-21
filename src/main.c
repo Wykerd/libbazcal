@@ -1,8 +1,26 @@
+/**
+ *  This file is part of Bazcal.
+ *
+ *  Bazcal is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Bazcal is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "bazcal.h"
 #include "fetch.h"
 #include "parser.h"
 #include "db.h"
 #include "calc.h"
+#include "ahpredict.h"
 #include <stdio.h>
 #include <curl/curl.h>
 #include <sqlite3.h>
@@ -38,6 +56,10 @@ int main () {
             for (size_t i = 0; i < predictions_len; i++) {
                 printf("[libbazcal] Prediction: %s,%d,%.2f\n", predictions[i]->item_name, predictions[i]->n, predictions[i]->value);
             }
+            bz_auction_pool_t **pool = bz_populate_auction_pool(db, predictions, predictions_len);
+            bz_auction_pool_t *random_flips = bz_random_auction_flips(pool, predictions_len, 0, 0, RAND_MAX, 50, 6, NULL);
+            printf("[libbazcal] %zu random predictions\n", random_flips->size);
+            bz_free_random_auction_flips(random_flips);
             bz_free_predictions(predictions, predictions_len);
         }
 

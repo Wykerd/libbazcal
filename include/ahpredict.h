@@ -15,26 +15,32 @@
  *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BZ_REGRESSION_H
-#define BZ_REGRESSION_H
+#ifndef BZ_AHPREDICT_H
+#define BZ_AHPREDICT_H
 
-#include "bazcal.h" 
+#include "bazcal.h"
+#include "calc.h"
+#include <sqlite3.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-double quick_select (double *arr, size_t n);
+bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **predictions, size_t len);
 
-struct bz_regression_s {
-    double slope;
-    double intercept;
-};
+bz_auction_pool_t *bz_random_auction_flips (
+    bz_auction_pool_t **pool, 
+    size_t len, 
+    bid_t max_bid, 
+    double min_profit, 
+    time_t max_time_left, 
+    int min_dataset, 
+    size_t try_item_amount, 
+    char **ignore_item
+);
 
-typedef struct bz_regression_s bz_regression_t;
-
-void bz_theil_sen (bz_regression_t *regression, bid_t *x, time_t *y, size_t len);
-double bz_predict (bz_regression_t *model, bid_t x);
+void bz_free_auction_pool (bz_auction_pool_t **pool, size_t len);
+void bz_free_random_auction_flips (bz_auction_pool_t *pool);
 
 #ifdef __cplusplus
 }

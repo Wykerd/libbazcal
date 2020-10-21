@@ -1,14 +1,30 @@
+/**
+ *  This file is part of Bazcal.
+ *
+ *  Bazcal is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Bazcal is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "calc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-static time_t get_time_ms(void)
-{
+static time_t get_time_ms(void) {
     struct timespec ts;
     clock_gettime(CLOCK_REALTIME, &ts);
     return (time_t)ts.tv_sec * 1000 + (ts.tv_nsec / 1000000);
-}
+};
 
 bz_prediction_t **bz_generate_predictions (sqlite3 *db, size_t *len) {
     sqlite3_stmt *stmt;

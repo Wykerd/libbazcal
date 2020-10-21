@@ -1,3 +1,20 @@
+/**
+ *  This file is part of Bazcal.
+ *
+ *  Bazcal is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Bazcal is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #ifndef BZ_BAZCAL_H
 #define BZ_BAZCAL_H
 
@@ -17,13 +34,6 @@ extern "C" {
 typedef __uint8_t* uuid_t;
 typedef __uint64_t bid_t;
 
-struct bz_bid_info_s {
-    bid_t max;
-    time_t time;
-};
-
-typedef struct bz_bid_info_s bz_bid_info_t;
-
 struct bz_auction_item_s {
     uuid_t uuid;
     uuid_t auctioneer;
@@ -40,14 +50,6 @@ struct bz_auction_item_s {
 
 typedef struct bz_auction_item_s bz_auction_item_t;
 
-struct bz_auction_prediction_s {
-    bid_t value;
-    bz_bid_info_t last_auction;
-    size_t n;
-};
-
-typedef struct bz_auction_prediction_s bz_auction_prediction_t;
-
 struct bz_bazaar_item_s {
     char* item_name;
     double buy;
@@ -57,6 +59,30 @@ struct bz_bazaar_item_s {
 };
 
 typedef struct bz_bazaar_item_s bz_bazaar_item_t;
+
+struct bz_prediction_s {
+    char* item_name;
+    size_t n;
+    double value;
+};
+
+typedef struct bz_prediction_s bz_prediction_t;
+
+struct bz_auction_candidate_s {
+    bz_auction_item_t *item;
+    bz_prediction_t *predicted;
+    double profit;
+};
+
+typedef struct bz_auction_candidate_s bz_auction_candidate_t;
+
+
+struct bz_auction_pool_s {
+    bz_auction_candidate_t **candidates;
+    size_t size;
+};
+
+typedef struct bz_auction_pool_s bz_auction_pool_t;
 
 #ifdef __cplusplus
 }
