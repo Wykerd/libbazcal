@@ -152,16 +152,19 @@ bz_auction_pool_t *bz_random_auction_flips (
     ret->size = 0;
     ret->candidates = malloc(sizeof(bz_auction_candidate_t *));
 
+    if (len < 1) return ret;
+
     size_t start_index = random_range(0, len - 1);
 
     size_t i = start_index;
 
     time_t current_time = get_time_ms();
 
-    if (len < 1) return ret;
-
     while (1) {
         if (++i >= len) i = 0; // loop back
+
+        if (pool[i]->size < 1) continue;
+        
         size_t _start_index = random_range(0, pool[i]->size - 1);
 
         size_t x = _start_index;
