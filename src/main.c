@@ -25,13 +25,6 @@
 #include <sqlite3.h>
 #include <string.h>
 
-void bz_auction_callback (bz_auction_pool_t **pool, size_t size) {
-    bz_auction_pool_t *random_flips = bz_random_auction_flips(pool, size, 0, 0, RAND_MAX, 50, 6, NULL);
-    printf("[libbazcal] %zu random predictions\n", random_flips->size);
-    bz_free_random_auction_flips(random_flips);
-    bz_free_auction_pool(pool, size);
-}
-
 int main () {
     bz_bazaar_t *data = bz_bazaar_init();
 
@@ -46,5 +39,5 @@ int main () {
     bazaar_free(data);
     fetch_free(baz_res);
 
-    bz_auction_loop("test.db", LOG_FETCH | LOG_GENERATE_PREDICTION | LOG_PREDICTION_COUNT | LOG_ITEM_PREDICTIONS, &bz_auction_callback);
+    bz_auction_loop("test.db", LOG_FETCH | LOG_GENERATE_PREDICTION | LOG_PREDICTION_COUNT | LOG_ITEM_PREDICTIONS);
 }

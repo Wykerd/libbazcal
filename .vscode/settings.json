@@ -13,6 +13,8 @@
         "ranges": "c",
         "valarray": "c",
         "tuple": "c",
-        "condition_variable": "c"
+        "condition_variable": "c",
+        "bitset": "c",
+        "utility": "c"
     }
 }

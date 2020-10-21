@@ -25,7 +25,7 @@
 #include <string.h>
 #include <sqlite3.h>
 
-void bz_auction_loop (const char* database_name, bz_log_level_t log_level, void(*prediction_callback)(bz_auction_pool_t **, size_t)) {
+void bz_auction_loop (const char* database_name, bz_log_level_t log_level) {
     int page = 0;
 
     sqlite3 *db;
@@ -45,7 +45,10 @@ void bz_auction_loop (const char* database_name, bz_log_level_t log_level, void(
                 }
             size_t pool_len = 0;
             bz_auction_pool_t **pool = bz_populate_auction_pool(db, predictions, predictions_len, &pool_len);
-            (*prediction_callback)(pool, pool_len);
+            bz_auction_pool_t *random_flips = bz_random_auction_flips(pool, pool_len, 0, 0, RAND_MAX, 50, 6, NULL);
+            printf("[libbazcal] %zu random predictions\n", random_flips->size);
+            bz_free_random_auction_flips(random_flips);
+            bz_free_auction_pool(pool, pool_len);
             bz_free_predictions(predictions, predictions_len);
         }
 

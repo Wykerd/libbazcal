@@ -33,7 +33,7 @@ enum bz_log_level {
 
 typedef enum bz_log_level bz_log_level_t;
 
-void bz_auction_loop (const char* database_name, bz_log_level_t log_level, void(*prediction_callback)(bz_auction_pool_t **, size_t));
+void bz_auction_loop (const char* database_name, bz_log_level_t log_level);
 
 #ifdef __cplusplus
 }
