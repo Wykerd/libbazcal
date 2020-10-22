@@ -24,16 +24,7 @@
 extern "C" {
 #endif
 
-enum bz_log_level {
-    LOG_FETCH = 1,
-    LOG_GENERATE_PREDICTION = 2,
-    LOG_PREDICTION_COUNT = 4,
-    LOG_ITEM_PREDICTIONS = 8
-};
-
-typedef enum bz_log_level bz_log_level_t;
-
-void bz_auction_loop (const char* database_name, bz_log_level_t log_level);
+void bz_auction_loop (const char* database_name, int log_level, void (*cycle_callback)(sqlite3 *db));
 
 #ifdef __cplusplus
 }

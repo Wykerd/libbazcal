@@ -20,10 +20,26 @@
 #include "parser.h"
 #include "calc.h"
 #include "loop.h"
+#include "ahpredict.h"
 #include <stdio.h>
-#include <curl/curl.h>
 #include <sqlite3.h>
-#include <string.h>
+
+void loop_callback (sqlite3 *db) {
+    size_t predictions_len = 0;
+    printf("[libbazcal] Generating auction predictions...\n");
+    bz_prediction_t **predictions = bz_generate_predictions(db, &predictions_len);
+    printf("[libbazcal] Generated %zu predictions for items\n", predictions_len);
+    for (size_t i = 0; i < predictions_len; i++) {
+        printf("[libbazcal] Prediction: %s,%d,%.2f\n", predictions[i]->item_name, predictions[i]->n, predictions[i]->value);
+    }
+    size_t pool_len = 0;
+    bz_auction_pool_t **pool = bz_populate_auction_pool(db, predictions, predictions_len, &pool_len);
+    bz_auction_pool_t *random_flips = bz_random_auction_flips(pool, pool_len, 0, 0, RAND_MAX, 50, 6, NULL);
+    printf("[libbazcal] %zu random predictions\n", random_flips->size);
+    bz_free_random_auction_flips(random_flips);
+    bz_free_auction_pool(pool, pool_len);
+    bz_free_predictions(predictions, predictions_len);
+}
 
 int main () {
     bz_bazaar_t *data = bz_bazaar_init();
@@ -39,5 +55,5 @@ int main () {
     bazaar_free(data);
     fetch_free(baz_res);
 
-    bz_auction_loop("test.db", LOG_FETCH | LOG_GENERATE_PREDICTION | LOG_PREDICTION_COUNT | LOG_ITEM_PREDICTIONS);
+    bz_auction_loop("test.db", 1, &loop_callback);
 }
