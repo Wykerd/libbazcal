@@ -176,8 +176,8 @@ bz_auction_pool_t *bz_random_auction_flips (
             if (pool[i]->candidates[x]->item->end < current_time) goto fail_continue;
             if (pool[i]->candidates[x]->item->end - current_time > max_time_left) goto fail_continue;
             if (max_bid && (pool[i]->candidates[x]->item->max_bid > max_bid)) goto fail_continue;
-            if (pool[i]->candidates[i]->profit < min_profit) goto fail_continue;
-            if (pool[i]->candidates[i]->predicted->n < min_dataset) goto fail_continue;
+            if (pool[i]->candidates[x]->profit < min_profit) goto fail_continue;
+            if (pool[i]->candidates[x]->predicted->n < min_dataset) goto fail_continue;
 
             ret->candidates = realloc(ret->candidates, sizeof(bz_auction_candidate_t *) * ++ret->size);
 
