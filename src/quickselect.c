@@ -5,7 +5,7 @@
  *  This code by Nicolas Devillard - 1998. Public domain.
  */
 
-#include "regression.h"
+#include "bazcal/regression.h"
 
 #define ELEM_SWAP(a,b) { register double t=(a);(a)=(b);(b)=t; }
 

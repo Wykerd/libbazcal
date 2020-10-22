@@ -84,6 +84,28 @@ struct bz_auction_pool_s {
 
 typedef struct bz_auction_pool_s bz_auction_pool_t;
 
+bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **predictions, size_t len, size_t *poollen);
+
+bz_auction_pool_t *bz_random_auction_flips (
+    bz_auction_pool_t **pool, 
+    size_t len, 
+    bid_t max_bid, 
+    double min_profit, 
+    time_t max_time_left, 
+    int min_dataset, 
+    size_t try_item_amount, 
+    char **ignore_item
+);
+
+void bz_free_auction_pool (bz_auction_pool_t **pool, size_t len);
+void bz_free_random_auction_flips (bz_auction_pool_t *pool);
+
+bz_prediction_t **bz_generate_predictions (sqlite3 *db, size_t *len);
+
+void bz_free_predictions (bz_prediction_t **predictions, size_t len);
+
+void bz_auction_loop (const char* database_name, int log_level, void (*cycle_callback)(sqlite3 *db));
+
 #ifdef __cplusplus
 }
 #endif

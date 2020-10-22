@@ -15,11 +15,10 @@
  *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "loop.h"
-#include "fetch.h"
-#include "parser.h"
-#include "db.h"
-#include "calc.h"
+#include "bazcal.h"
+#include "bazcal/fetch.h"
+#include "bazcal/parser.h"
+#include "bazcal/db.h"
 #include <stdio.h>
 #include <string.h>
 #include <sqlite3.h>

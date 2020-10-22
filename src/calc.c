@@ -15,7 +15,8 @@
  *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "calc.h"
+#include "bazcal.h"
+#include "bazcal/regression.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

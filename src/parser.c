@@ -15,7 +15,7 @@
  *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "parser.h"
+#include "bazcal/parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

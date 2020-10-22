@@ -15,7 +15,7 @@
  *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "fetch.h"
+#include "bazcal/fetch.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

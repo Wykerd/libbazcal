@@ -15,7 +15,7 @@
  *  along with Bazcal.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "db.h"
+#include "bazcal/db.h"
 
 int bz_init_db (sqlite3 *db) {
     sqlite3_stmt *stmt;

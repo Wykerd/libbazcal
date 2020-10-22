@@ -16,11 +16,8 @@
  */
 
 #include "bazcal.h"
-#include "fetch.h"
-#include "parser.h"
-#include "calc.h"
-#include "loop.h"
-#include "ahpredict.h"
+#include "bazcal/fetch.h"
+#include "bazcal/parser.h"
 #include <stdio.h>
 #include <sqlite3.h>
 
