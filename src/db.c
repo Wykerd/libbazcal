@@ -77,7 +77,7 @@ int bz_add_auc_record (sqlite3 *db, bz_auction_item_t *item) {
 int bz_add_auc_page (sqlite3 *db, bz_auction_page_t *page) {
     for (size_t i = 0; i < page->count; i++) {
         int x = bz_add_auc_record(db, page->auctions[i]);
-        if (x != SQLITE_OK) return x;
+        if (x != SQLITE_DONE) return x;
     }
     return SQLITE_OK;
 };
