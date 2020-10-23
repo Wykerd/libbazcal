@@ -36,9 +36,7 @@ bz_bazaar_advice_buf_t *bz_advise (bz_bazaar_t *data, bid_t balance, uint32_t ti
 
         unsorted->items[unsorted->count - 1] = malloc(sizeof(bz_bazaar_advise_t));
 
-        // dupe name to avoid free issues
-        unsorted->items[unsorted->count - 1]->name = calloc(sizeof(char), strlen(data->items[i]->item_name) + 1);
-        strcpy(unsorted->items[unsorted->count - 1]->name, data->items[i]->item_name);
+        unsorted->items[unsorted->count - 1]->name = data->items[i]->item_name;
 
         double profit = (data->items[i]->sell * 0.99) - data->items[i]->buy;
 
@@ -68,7 +66,6 @@ bz_bazaar_advice_buf_t *bz_advise (bz_bazaar_t *data, bid_t balance, uint32_t ti
 
 void bz_free_advise (bz_bazaar_advice_buf_t *advise) {
     for (size_t i = 0; i < advise->count; i++) {
-        free(advise->items[i]->name);
         free(advise->items[i]);
     }
     free(advise->items);
