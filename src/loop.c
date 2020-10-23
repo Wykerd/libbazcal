@@ -23,8 +23,9 @@
 #include <string.h>
 #include <sqlite3.h>
 #include <assert.h>
+#include <unistd.h>
 
-void bz_auction_loop (const char* database_name, int log_level, void (*cycle_callback)(sqlite3 *db)) {
+void bz_auction_loop (const char* database_name, int log_level, void (*cycle_callback)(sqlite3 *)) {
     int page = 0;
 
     sqlite3 *db;
@@ -64,4 +65,19 @@ void bz_auction_loop (const char* database_name, int log_level, void (*cycle_cal
         auction_page_free(parsed);
         fetch_free(res);
     }
+}
+
+void bz_bazaar_loop (void (*cycle_callback)(bz_bazaar_t *)) {
+    while (1) {
+        bz_bazaar_t *data = bz_bazaar_init();
+
+        bz_fetch_res_t *baz_res = fetch_init_res();
+        fetch("https://api.hypixel.net/skyblock/bazaar", baz_res);
+        bz_parse_bazaar(baz_res, data);
+        fetch_free(baz_res);
+
+        (*cycle_callback)(data);
+
+        sleep(15);
+    };
 }

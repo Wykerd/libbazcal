@@ -112,7 +112,7 @@ bz_prediction_t **bz_generate_predictions (sqlite3 *db, size_t *len);
 
 void bz_free_predictions (bz_prediction_t **predictions, size_t len);
 
-void bz_auction_loop (const char* database_name, int log_level, void (*cycle_callback)(sqlite3 *db));
+void bz_auction_loop (const char* database_name, int log_level, void (*cycle_callback)(sqlite3 *));
 
 struct bz_bazaar_advise_s {
     char* name;
@@ -135,6 +135,8 @@ typedef struct bz_bazaar_advice_buf_s bz_bazaar_advice_buf_t;
 bz_bazaar_advice_buf_t *bz_advise (bz_bazaar_t *data, bid_t balance, uint32_t time);
 
 void bz_free_advise (bz_bazaar_advice_buf_t *advise);
+
+void bz_bazaar_loop (void (*cycle_callback)(bz_bazaar_t *));
 
 #ifdef __cplusplus
 }

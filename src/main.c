@@ -38,7 +38,20 @@ void loop_callback (sqlite3 *db) {
     bz_free_predictions(predictions, predictions_len);
 }
 
+void bazaar_loop_callback(bz_bazaar_t *data) {
+    bz_bazaar_advice_buf_t *items = bz_advise(data, 10000, 5);
+
+    for (size_t x = 0; x < items->count; x++) {
+        printf(">>> %s\n", items->items[x]->name);
+    }
+
+    bz_free_advise(items);
+    bz_free_bazaar(data);
+}
+
 int main () {
+    // bz_bazaar_loop(&bazaar_loop_callback);
+
     bz_bazaar_t *data = bz_bazaar_init();
 
     bz_fetch_res_t *baz_res = fetch_init_res();
