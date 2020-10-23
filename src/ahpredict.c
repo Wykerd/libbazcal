@@ -97,6 +97,7 @@ bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **pre
             LAST_CANDIDATE->item->start = sqlite3_column_int64(stmt, 2);
             LAST_CANDIDATE->item->end = sqlite3_column_int64(stmt, 3);
             LAST_CANDIDATE->item->has_bid = sqlite3_column_int(stmt, 5);
+            LAST_CANDIDATE->item->max_bid = max_bid;
 
             const char* item_full_name = sqlite3_column_text(stmt, 6);
 

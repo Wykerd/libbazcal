@@ -49,7 +49,7 @@ int fetch (char *url, bz_fetch_res_t *data) {
     
     curl = curl_easy_init();
     if (!curl) {
-        fprintf(stderr, "fetch failed: Could not init curl");
+        fprintf(stderr, "fetch failed: Could not init curl\n");
         return 1;
     }
 
@@ -58,7 +58,7 @@ int fetch (char *url, bz_fetch_res_t *data) {
     curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_cb);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, data);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, "bazcal/2.1");
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, "bazcal/3.0");
 
     res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
