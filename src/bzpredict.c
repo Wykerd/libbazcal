@@ -40,12 +40,12 @@ bz_bazaar_advice_buf_t *bz_advise (bz_bazaar_t *data, bid_t balance, uint32_t ti
 
         double profit = (data->items[i]->sell * 0.99) - data->items[i]->buy;
 
-        uint32_t tvolume = (MIN(data->items[i]->volume, data->items[i]->svolume) / 10080) * time;
+        double tvolume = (MIN(data->items[i]->volume, data->items[i]->svolume) / 10080) * time * 1.0;
 
         double evolume = LIMIT(tvolume, 0, balance / data->items[i]->buy);
 
         unsorted->items[unsorted->count - 1]->evolume = evolume;
-        unsorted->items[unsorted->count - 1]->invested = data->items[i]->buy * profit;
+        unsorted->items[unsorted->count - 1]->invested = data->items[i]->buy * evolume;
         unsorted->items[unsorted->count - 1]->eprofit = evolume * profit;
         unsorted->items[unsorted->count - 1]->pinvested = (data->items[i]->buy * evolume) / balance;
         unsorted->items[unsorted->count - 1]->pprofit = profit / data->items[i]->buy;
