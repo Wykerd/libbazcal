@@ -89,7 +89,7 @@ bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **pre
 bz_auction_pool_t *bz_random_auction_flips (
     bz_auction_pool_t **pool, 
     size_t len, 
-    bid_t max_bid, 
+    double max_bid, 
     double min_profit, 
     time_t max_time_left, 
     time_t min_time_left,
