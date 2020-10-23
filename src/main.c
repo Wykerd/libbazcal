@@ -44,13 +44,20 @@ int main () {
     bz_fetch_res_t *baz_res = fetch_init_res();
     fetch("https://api.hypixel.net/skyblock/bazaar", baz_res);
     bz_parse_bazaar(baz_res, data);
+    fetch_free(baz_res);
 
     for (size_t x = 0; x < data->count; x++) {
         printf("%s\n", data->items[x]->item_name);
     }
 
-    bazaar_free(data);
-    fetch_free(baz_res);
+    bz_bazaar_advice_buf_t *items = bz_advise(data, 10000, 5);
+
+    for (size_t x = 0; x < items->count; x++) {
+        printf(">>> %s\n", items->items[x]->name);
+    }
+
+    bz_free_advise(items);
+    bz_free_bazaar(data);
 
     bz_auction_loop("test.db", 1, &loop_callback);
 }

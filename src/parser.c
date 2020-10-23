@@ -239,7 +239,7 @@ fail:
     return 1;
 }
 
-void bazaar_free (bz_bazaar_t *data) {
+void bz_free_bazaar (bz_bazaar_t *data) {
     for (size_t c = 0; c < data->count; c++) {
         free(data->items[c]->item_name);
         free(data->items[c]);

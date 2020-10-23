@@ -39,14 +39,7 @@ void auction_page_free (bz_auction_page_t *page);
 int bz_parse_auctions (bz_fetch_res_t *res, bz_auction_page_t *parsed);
 bz_auction_page_t *bz_auction_page_init ();
 
-struct bz_bazaar_s {
-    size_t count;
-    bz_bazaar_item_t **items;
-};
-
-typedef struct bz_bazaar_s bz_bazaar_t;
-
-void bazaar_free (bz_bazaar_t *data);
+void bz_free_bazaar (bz_bazaar_t *data);
 int bz_parse_bazaar (bz_fetch_res_t *res, bz_bazaar_t *parsed);
 bz_bazaar_t *bz_bazaar_init ();
 

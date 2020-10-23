@@ -13,6 +13,7 @@ add_library(bazcal SHARED
     src/db.c
     src/ahpredict.c
     src/loop.c
+    src/bzpredict.c
 )
 
 target_compile_options(bazcal PRIVATE -Wall)
@@ -21,4 +22,4 @@ include_directories(include)
 
 target_link_libraries(bzcore PUBLIC bazcal)
 
-target_link_libraries(bazcal PUBLIC curl sqlite3 jansson)
+target_link_libraries(bazcal PUBLIC curl sqlite3 jansson m)

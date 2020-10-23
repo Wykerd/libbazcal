@@ -20,3 +20,54 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
+#define LIMIT(val, min, max) (((val) < (min)) ? (min) : ((val) > (max) ? (max) : (val)))
+
+bz_bazaar_advice_buf_t *bz_advise (bz_bazaar_t *data, bid_t balance, uint32_t time) {
+    bz_bazaar_advice_buf_t *unsorted = malloc(sizeof (bz_bazaar_advice_buf_t));
+
+    unsorted->count = 0;
+    unsorted->items = malloc(sizeof(bz_bazaar_advise_t *));
+
+    for (size_t i = 0; i < data->count; i++) {
+        // data->items[i]
+        unsorted->items = realloc(unsorted->items, ++unsorted->count * sizeof(bz_bazaar_advise_t *));
+
+        unsorted->items[unsorted->count - 1] = malloc(sizeof(bz_bazaar_advise_t));
+
+        unsorted->items[unsorted->count - 1]->name = data->items[i]->item_name;
+
+        double profit = (data->items[i]->sell * 0.99) - data->items[i]->buy;
+
+        uint32_t tvolume = (MIN(data->items[i]->volume, data->items[i]->svolume) / 10080) * time;
+
+        double evolume = LIMIT(tvolume, 0, balance / data->items[i]->buy);
+
+        unsorted->items[unsorted->count - 1]->evolume = evolume;
+        unsorted->items[unsorted->count - 1]->invested = data->items[i]->buy * profit;
+        unsorted->items[unsorted->count - 1]->eprofit = evolume * profit;
+        unsorted->items[unsorted->count - 1]->pinvested = (data->items[i]->buy * evolume) / balance;
+        unsorted->items[unsorted->count - 1]->pprofit = profit / data->items[i]->buy;
+    };
+
+    for (size_t i = 0; i < unsorted->count - 1; i++) {
+        for (size_t x = i + 1; x < unsorted->count; x++) {
+            if (unsorted->items[i]->eprofit < unsorted->items[x]->eprofit) {
+                bz_bazaar_advise_t *tmp = unsorted->items[i];
+                unsorted->items[i] = unsorted->items[x];
+                unsorted->items[x] = tmp;
+            }
+        }
+    };
+
+    return unsorted;
+};
+
+void bz_free_advise (bz_bazaar_advice_buf_t *advise) {
+    for (size_t i = 0; i < advise->count; i++) {
+        free(advise->items[i]);
+    }
+    free(advise->items);
+    free(advise);
+};

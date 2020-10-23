@@ -33,6 +33,7 @@ extern "C" {
 
 typedef char* uuid_t;
 typedef __uint64_t bid_t;
+typedef __uint32_t uint32_t;
 
 struct bz_auction_item_s {
     uuid_t uuid;
@@ -76,6 +77,12 @@ struct bz_auction_candidate_s {
 
 typedef struct bz_auction_candidate_s bz_auction_candidate_t;
 
+struct bz_bazaar_s {
+    size_t count;
+    bz_bazaar_item_t **items;
+};
+
+typedef struct bz_bazaar_s bz_bazaar_t;
 
 struct bz_auction_pool_s {
     bz_auction_candidate_t **candidates;
@@ -106,6 +113,28 @@ bz_prediction_t **bz_generate_predictions (sqlite3 *db, size_t *len);
 void bz_free_predictions (bz_prediction_t **predictions, size_t len);
 
 void bz_auction_loop (const char* database_name, int log_level, void (*cycle_callback)(sqlite3 *db));
+
+struct bz_bazaar_advise_s {
+    char* name;
+    double evolume;
+    double invested;
+    double eprofit;
+    double pinvested;
+    double pprofit;
+};
+
+typedef struct bz_bazaar_advise_s bz_bazaar_advise_t;
+
+struct bz_bazaar_advice_buf_s {
+    bz_bazaar_advise_t **items;
+    size_t count;
+};
+
+typedef struct bz_bazaar_advice_buf_s bz_bazaar_advice_buf_t;
+
+bz_bazaar_advice_buf_t *bz_advise (bz_bazaar_t *data, bid_t balance, uint32_t time);
+
+void bz_free_advise (bz_bazaar_advice_buf_t *advise);
 
 #ifdef __cplusplus
 }
