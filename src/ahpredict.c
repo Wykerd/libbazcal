@@ -146,6 +146,7 @@ bz_auction_pool_t *bz_random_auction_flips (
     bid_t max_bid, 
     double min_profit, 
     time_t max_time_left, 
+    time_t min_time_left,
     int min_dataset, 
     size_t try_item_amount, 
     char **ignore_item
@@ -176,6 +177,7 @@ bz_auction_pool_t *bz_random_auction_flips (
 
             if (pool[i]->candidates[x]->item->end < current_time) goto fail_continue;
             if (pool[i]->candidates[x]->item->end - current_time > max_time_left) goto fail_continue;
+            if (pool[i]->candidates[x]->item->end - current_time < min_time_left) goto fail_continue;
             if (max_bid && (pool[i]->candidates[x]->item->max_bid > max_bid)) goto fail_continue;
             if (pool[i]->candidates[x]->profit < min_profit) goto fail_continue;
             if (pool[i]->candidates[x]->predicted->n < min_dataset) goto fail_continue;

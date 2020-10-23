@@ -92,6 +92,7 @@ bz_auction_pool_t *bz_random_auction_flips (
     bid_t max_bid, 
     double min_profit, 
     time_t max_time_left, 
+    time_t min_time_left,
     int min_dataset, 
     size_t try_item_amount, 
     char **ignore_item
