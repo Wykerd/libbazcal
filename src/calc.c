@@ -56,7 +56,7 @@ bz_prediction_t **bz_generate_predictions (sqlite3 *db, size_t *len) {
     rc = sqlite3_step(stmt);
 
     while (rc == SQLITE_ROW) {
-        const char* item_name = sqlite3_column_text(stmt, 0);
+        const char* item_name = (const char*)sqlite3_column_text(stmt, 0);
         
         sqlite3_stmt *_stmt;
 

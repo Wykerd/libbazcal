@@ -79,7 +79,7 @@ bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **pre
             LAST_CANDIDATE->profit = predicted_profit;
             LAST_CANDIDATE->item = malloc(sizeof(bz_auction_item_t));
 
-            const char* uuid = sqlite3_column_text(stmt, 0);
+            const char* uuid = (const char*)sqlite3_column_text(stmt, 0);
 
             LAST_CANDIDATE->item->uuid = calloc(sizeof(char), strlen(uuid) + 1);
 
@@ -88,7 +88,7 @@ bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **pre
             if (sqlite3_column_type(stmt, 1) == SQLITE_NULL) { 
                 LAST_CANDIDATE->item->auctioneer = calloc(sizeof(char), 1);
             } else {
-                const char* auctioneer = sqlite3_column_text(stmt, 1);
+                const char* auctioneer = (const char*)sqlite3_column_text(stmt, 1);
                 LAST_CANDIDATE->item->auctioneer = calloc(sizeof(char), strlen(auctioneer) + 1);
 
                 strcpy(LAST_CANDIDATE->item->auctioneer, auctioneer);
@@ -99,13 +99,13 @@ bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **pre
             LAST_CANDIDATE->item->has_bid = sqlite3_column_int(stmt, 5);
             LAST_CANDIDATE->item->max_bid = max_bid;
 
-            const char* item_full_name = sqlite3_column_text(stmt, 6);
+            const char* item_full_name = (const char*)sqlite3_column_text(stmt, 6);
 
             LAST_CANDIDATE->item->name.full = calloc(sizeof(char), strlen(item_full_name) + 1);
 
             strcpy(LAST_CANDIDATE->item->name.full, item_full_name);
 
-            const char* item_name = sqlite3_column_text(stmt, 7);
+            const char* item_name = (const char*)sqlite3_column_text(stmt, 7);
 
             LAST_CANDIDATE->item->name.item = calloc(sizeof(char), strlen(item_name) + 1);
 
