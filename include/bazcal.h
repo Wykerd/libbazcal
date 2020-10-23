@@ -138,6 +138,8 @@ void bz_free_advise (bz_bazaar_advice_buf_t *advise);
 
 void bz_bazaar_loop (void (*cycle_callback)(bz_bazaar_t *));
 
+void bz_free_bazaar (bz_bazaar_t *data);
+
 #ifdef __cplusplus
 }
 #endif
