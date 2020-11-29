@@ -112,6 +112,8 @@ bz_auction_pool_t **bz_populate_auction_pool (sqlite3 *db, bz_prediction_t **pre
             strcpy(LAST_CANDIDATE->item->name.item, item_name);
 
             LAST_CANDIDATE->item->bin = sqlite3_column_int(stmt, 8);
+
+            LAST_CANDIDATE->ref = 1;
 next_loop:
             rc = sqlite3_step(stmt);
         }
@@ -124,20 +126,34 @@ next_loop:
     return pool;
 }
 
+void bz_free_auction_candidate (bz_auction_candidate_t *candidate) {
+    candidate->ref--;
+    if (candidate->ref == 0) {
+        free(candidate->item->name.item);
+        free(candidate->item->name.full);
+        free(candidate->item->auctioneer);
+        free(candidate->item->uuid);
+        free(candidate->item);
+        free(candidate);
+        candidate = NULL;
+    }
+}
+
+bz_auction_candidate_t *bz_dup_auction_candidate (bz_auction_candidate_t *candidate) {
+    candidate->ref++;
+    return candidate;
+}
+
 void bz_free_auction_pool (bz_auction_pool_t **pool, size_t len) {
     for (size_t i = 0; i < len; i++) {
-        for (size_t x = 0; x < pool[i]->size; x++) {
-            free(pool[i]->candidates[x]->item->name.item);
-            free(pool[i]->candidates[x]->item->name.full);
-            free(pool[i]->candidates[x]->item->auctioneer);
-            free(pool[i]->candidates[x]->item->uuid);
-            free(pool[i]->candidates[x]->item);
-            free(pool[i]->candidates[x]);
-        }
+        for (size_t x = 0; x < pool[i]->size; x++)
+            bz_free_auction_candidate(pool[i]->candidates[x]);
+        
         free(pool[i]->candidates);
         free(pool[i]);
     }
     free(pool);
+    pool = NULL;
 }
 
 bz_auction_pool_t *bz_random_auction_flips (
@@ -184,7 +200,7 @@ bz_auction_pool_t *bz_random_auction_flips (
 
             ret->candidates = realloc(ret->candidates, sizeof(bz_auction_candidate_t *) * ++ret->size);
 
-            ret->candidates[ret->size-1] = pool[i]->candidates[x];
+            ret->candidates[ret->size-1] = bz_dup_auction_candidate(pool[i]->candidates[x]);
 
             if (ret->size == try_item_amount) return ret;
 
@@ -198,6 +214,9 @@ fail_continue:
 }
 
 void bz_free_random_auction_flips (bz_auction_pool_t *pool) {
+    for (size_t i = 0; pool->size; i++) {
+        bz_free_auction_candidate(pool->candidates[i]);
+    }
     free(pool->candidates);
     free(pool);
 }

@@ -73,6 +73,7 @@ struct bz_auction_candidate_s {
     bz_auction_item_t *item;
     bz_prediction_t *predicted;
     double profit;
+    size_t ref;
 };
 
 typedef struct bz_auction_candidate_s bz_auction_candidate_t;
@@ -107,6 +108,9 @@ bz_auction_pool_t *bz_random_auction_flips (
 
 void bz_free_auction_pool (bz_auction_pool_t **pool, size_t len);
 void bz_free_random_auction_flips (bz_auction_pool_t *pool);
+
+void bz_free_auction_pool (bz_auction_pool_t **pool, size_t len);
+bz_auction_candidate_t *bz_dup_auction_candidate (bz_auction_candidate_t *candidate);
 
 bz_prediction_t **bz_generate_predictions (sqlite3 *db, size_t *len);
 
